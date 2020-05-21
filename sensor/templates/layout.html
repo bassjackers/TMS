@@ -1,0 +1,15 @@
+{% extends 'sensor_base.html' %}
+{% block body %}
+{% include 'partials/sidebar.html' %}
+
+<div id="content-wrapper" class="d-flex flex-column">
+
+    <div id="content">
+        {% include 'partials/navbar.html' %}
+        {% block content %}
+        {% endblock %}
+    </div>
+    {% include 'partials/footer.html' %}
+
+</div>
+{% endblock %}
