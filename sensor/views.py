@@ -16,13 +16,21 @@ class ChartData(APIView):
 
     def get(self, request, format=None):
         labels = SensorData.objects.values_list(
-            'timestamp').order_by('timestamp')
+            'timestamp').order_by('-timestamp')[:5]
+
         chartLabel = "Temperature"
-        chartdata = SensorData.objects.values_list('temp_avg')
+        chartLabel_1 = "Humidity"
+
+        chartdata = SensorData.objects.values_list(
+            'temp_avg').order_by('-timestamp')
+        chartdata_1 = SensorData.objects.values_list(
+            'hum_avg').order_by('-timestamp')
         data = {
             "labels": labels,
             "chartLabel": chartLabel,
+            "chartLabel_1": chartLabel_1,
             "chartdata": chartdata,
+            "chartdata_1": chartdata_1
         }
         return Response(data)
 

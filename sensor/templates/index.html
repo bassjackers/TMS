@@ -2,21 +2,32 @@
 {% block content %}
 
 <div class="row">
-    <div class="col-sm-12">
-        <div class="card shadow mb-4">
-            <!-- Card Header - Dropdown -->
-            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                <h1 class="m-0 font-weight-bold text-primary">온도</h1>
-            </div>
-            <!-- Card Body -->
-            <div class="card-body">
-                <div class="chart-area">
-                    <canvas id="myChartline" width="525" height="175"></canvas>
-                </div>
-            </div>
-        </div>
+    <div class="col-md-7">
+        <canvas id="myChartline"></canvas>
+    </div>
+    <div class="col-md-7">
+        <canvas id="myChartline_1"></canvas>
+    </div>
+    <div class="col-md-7">
+        <table>
+            <tr>
+                <thead>
+                    <tr>
+                        <th>fjwejfwjefojwe</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th>
+                            fwefwef
+                        </th>
+                    </tr>
+                </tbody>
+            </tr>
+        </table>
     </div>
 </div>
+
 
 {% endblock %}
 
@@ -25,6 +36,8 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 
 <script>
+
+
     var endpoint = 'api';
 
     $.ajax({
@@ -40,11 +53,26 @@
         }
     })
 
+    $.ajax({
+        method: "GET",
+        url: endpoint,
+        success: function (data) {
+            drawLineGraph_1(data, 'myChartline_1');
+            drawBarGraph(data, 'myChartBar');
+            console.log("drawing");
+        },
+        error: function (error_data) {
+            console.log(error_data);
+        }
+    })
+
 
     function drawLineGraph(data, id) {
         var labels = data.labels;
         var chartLabel = data.chartLabel;
         var chartdata = data.chartdata;
+
+
         var ctx = document.getElementById(id).getContext('2d');
         var chart = new Chart(ctx, {
             // The type of chart we want to create 
@@ -57,6 +85,68 @@
                     label: chartLabel,
                     backgroundColor: 'rgb(255, 201, 14, 0.5)',
                     borderColor: 'rgb(255, 201, 14, 1)',
+                    fill: false,
+                    lineTension: 0,
+                    data: chartdata
+                }]
+            },
+
+            // Configuration options go here 
+            options: {
+                responsive: true,
+                tooltips: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                hover: {
+                    mode: 'nearest',
+                    intersect: true
+                },
+
+                scales: {
+                    xAxes: [{
+                        display: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Time'
+                        }
+                    }],
+                    yAxes: [{
+                        display: true,
+                        ticks: {
+                            suggestedMin: 0,
+                            fontSize: 15,
+                            min: 10,
+                            max: 30,
+                            stepSize: 1
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'degree'
+                        }
+                    }]
+                }
+            }
+
+        });
+    }
+
+    function drawLineGraph_1(data, id) {
+        var labels = data.labels;
+        var chartLabel = data.chartLabel_1;
+        var chartdata = data.chartdata_1;
+        var ctx = document.getElementById(id).getContext('2d');
+        var chart = new Chart(ctx, {
+            // The type of chart we want to create 
+            type: 'line',
+
+            // The data for our dataset 
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: chartLabel,
+                    backgroundColor: 'rgb(255, 99, 132, 0.2)',
+                    borderColor: 'rgb(255, 99, 132, 1)',
                     fill: false,
                     lineTension: 0,
                     data: chartdata,
@@ -88,8 +178,8 @@
                         ticks: {
                             suggestedMin: 0,
                             fontSize: 15,
-                            min: 0,
-                            max: 30,
+                            min: 80,
+                            max: 100,
                             stepSize: 1
                         },
                         scaleLabel: {
