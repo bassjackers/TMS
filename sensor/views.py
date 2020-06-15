@@ -1,24 +1,40 @@
 from django.shortcuts import render
-from django.views.generic import TemplateView
-
-# Create your views here.
+from django.views.generic import View, TemplateView
+from rest_framework.views import APIView
+from rest_framework.response import Response
 from .models import SensorData
 
-import numpy as np
+
+class HomeView(View):
+    def get(self, request, *args, **kwargs):
+        return render(request, 'index.html')
 
 
-class IndexView(TemplateView):
-    template_name = 'index.html'
+class ChartData(APIView):
+    authentication_classes = []
+    permission_classes = []
 
-    def get_context_data(self, **kwargs):
-        # Call the base implementation first to get a context
-        context = super().get_context_data(**kwargs)
+    def get(self, request, format=None):
+        labels = SensorData.objects.values_list(
+            'timestamp').order_by('timestamp')
+        chartLabel = "Temperature"
+        chartdata = SensorData.objects.values_list('temp_avg')
+        data = {
+            "labels": labels,
+            "chartLabel": chartLabel,
+            "chartdata": chartdata,
+        }
+        return Response(data)
 
-        np.random.randn(10) + 20
-        sample_temperature = np.random.randn(10) + 20
 
-        context['temperature'] = list(sample_temperature)
-        # print(SensorData.objects.all())
-        # Add in a QuerySet of all the books
-        # context['book_list'] = Book.objects.all()
-        return context
+# class IndexView(ListView):
+#     template_name = 'index.html'
+
+#     queryset = SensorData.objects.all().order_by('timestamp')
+
+#     def get_context_data(self, *args, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         val = SensorData.objects.all().order_by('timestamp')
+#         val = list(val)
+
+#         return context

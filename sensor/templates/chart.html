@@ -1,0 +1,23 @@
+{% extends 'index.html' %}
+
+<script>
+    {% block jquery %}
+    var endpoint = '/data'
+    data: {
+        labels: data.labels, #updated
+        datasets: [{
+            label: 'Votes per day',
+            data: data.data, #updated
+    $.ajax({
+                method: "GET",
+                url: endpoint,
+                success: function (data) {
+                    <code for the chart>
+                        },
+      error: function(error_data){
+                            console.log(error_data)
+                        }
+  })
+
+  {% endblock %}
+</script>

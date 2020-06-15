@@ -20,9 +20,6 @@ class Product(models.Model):
 
 class SensorData(models.Model):
 
-    class Meta:
-        ordering = ['-timestamp']
-
     product = models.ForeignKey('Product', on_delete=models.CASCADE)
     temp_min = models.FloatField()
     temp_max = models.FloatField()
@@ -36,8 +33,11 @@ class SensorData(models.Model):
     vib_max = models.FloatField()
     vib_me = models.FloatField()
     vib_avg = models.FloatField()
-    timestamp = models.DateTimeField(auto_now=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
     status_desc = models.CharField(max_length=255)
+
+    class Meta:
+        ordering = ['timestamp']
 
 
 # class Alert(models.Model):

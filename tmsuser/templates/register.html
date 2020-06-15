@@ -11,13 +11,26 @@
           <div class="text-center">
             <h1 class="h4 text-gray-900 mb-4">Create an Account!</h1>
           </div>
-          <form class="user">
+          <div class="row mt-5">
+            <div class="col-12">
+              {{ error }}
+            </div>
+          </div>
+          <form class="user" method="POST" action=".">
+            {% csrf_token %}
+            {% for field in form %}
             <div class="form-group row">
-              <div class="col-sm-6 mb-3 mb-sm-0">
-                <input type="text" class="form-control form-control-user" id="exampleFirstName"
-                  placeholder="First Name">
+              <div class="col-12">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                <input type="{{ field.field.widget.input_type }}" class="form-control form-control-user"
+                  id="{{ field.id_for_label }}" placeholder="{{ field.label }}" name="{{ field.name }}" />
               </div>
-              <div class="col-sm-6">
+            </div>
+            {% if field.errors %}
+            <span style="color: red">{{ field.errors }}</span>
+            {% endif %}
+            {% endfor %}
+            <!-- <div class="col-sm-6">
                 <input type="text" class="form-control form-control-user" id="exampleLastName" placeholder="Last Name">
               </div>
             </div>
@@ -34,10 +47,10 @@
                 <input type="password" class="form-control form-control-user" id="exampleRepeatPassword"
                   placeholder="Repeat Password">
               </div>
+            </div> -->
+            <div class="col-12">
+              <button type="submit" class=" btn btn-primary">회원가입</button>
             </div>
-            <a href="login.html" class="btn btn-primary btn-user btn-block">
-              Register Account
-            </a>
             <hr>
             <a href="index.html" class="btn btn-google btn-user btn-block">
               <i class="fab fa-google fa-fw"></i> Register with Google

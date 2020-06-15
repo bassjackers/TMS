@@ -11,7 +11,8 @@ class CreateAccountForm(forms.Form):
 
         max_length=64,
         widget=forms.EmailInput(
-            attrs={'class': 'form-control', 'placeholder': 'E-MAIL'})
+            attrs={'class': 'form-control', 'placeholder': 'E-MAIL'}),
+        label="E-mail address"
     )
 
     password = forms.CharField(
@@ -19,7 +20,8 @@ class CreateAccountForm(forms.Form):
             'required': '비밀번호를 입력해주세요.'
         },
         widget=forms.PasswordInput(
-            attrs={'class': 'form-control', 'placeholder': 'PASSWORD'})
+            attrs={'class': 'form-control', 'placeholder': 'PASSWORD'}),
+        label="Password"
     )
 
     check_password = forms.CharField(
@@ -27,7 +29,8 @@ class CreateAccountForm(forms.Form):
             'required': '비밀번호를 입력해주세요.'
         },
         widget=forms.PasswordInput(
-            attrs={'class': 'form-control', 'placeholder': 'CHECK PASSWORD'})
+            attrs={'class': 'form-control', 'placeholder': 'CHECK PASSWORD'}),
+        label="Repeat Password"
     )
 
     class Meta:
@@ -41,8 +44,9 @@ class CreateAccountForm(forms.Form):
         check_password = cleaned_data.get('check_password')
 
         if password and check_password:
-            self.add_error('password', '비밀번호가 서로 다릅니다.')
-            self.add_error()
+            if password != check_password:
+                self.add_error('password', '비밀번호가 서로 다릅니다.')
+                self.add_error('check_password', '비밀번호가 서로 다릅니다.')
 
 
 class LoginForm(forms.Form):
@@ -50,13 +54,13 @@ class LoginForm(forms.Form):
         error_messages={
             'required': '이메일 주소를 입력해주세요.'
         },
-        max_length=64
+        max_length=64, label="Email address"
     )
     password = forms.CharField(
         error_messages={
             'required': '비밀번호를 입력해주세요.'
         },
-        widget=forms.Textarea
+        widget=forms.PasswordInput(), label='Password'
     )
 
     def clean(self):

@@ -6,15 +6,10 @@ from .forms import CreateAccountForm, LoginForm
 from .models import Account
 
 
-class IndexView(TemplateView):
-    template_name = 'home.html'
-    succes_url = '/'
-
-
 class CreateAccountView(FormView):
     template_name = 'register.html'
     form_class = CreateAccountForm
-    success_url = '/'
+    success_url = '/tmsuser/login'
 
     def form_valid(self, form):
         account = Account(
@@ -27,6 +22,7 @@ class CreateAccountView(FormView):
 
 
 class LoginView(FormView):
+
     template_name = 'login.html'
     form_class = LoginForm
     success_url = '/'
@@ -38,6 +34,7 @@ class LoginView(FormView):
 
 
 def logout(request):
+
     if 'user' in request.session:
         del(request.session['user'])
 
